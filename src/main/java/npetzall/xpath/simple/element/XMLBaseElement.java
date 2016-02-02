@@ -15,10 +15,12 @@ public abstract class XMLBaseElement implements XMLElement {
         this.elementName = elementName;
     }
 
+    @Override
     public XMLElementSource getSource() {
         return xmlElementSource;
     }
 
+    @Override
     public QName getElementName() {
         return elementName;
     }

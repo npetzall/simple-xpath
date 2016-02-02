@@ -47,6 +47,7 @@ public class XMLElementStreamTest {
                 endElementCounter.incrementAndGet();
             }
         });
+        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
         assertThat(startElementCounter.intValue()).isEqualTo(endElementCounter.intValue());
         assertThat(startElementCounter.intValue()).isEqualTo(XMLResources.getSimpleXMLWithoutNamespacesStartElementCount());
     }

@@ -9,33 +9,86 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class XMLElementBuilderTest {
 
-    @Test
-    public void canCreateBuilder() {
-        XMLElementBuilder builder = XMLElementBuilder.builder(new XMLElementSourceDouble());
-        assertThat(builder).isNotNull();
-    }
-
-    @Test
-    public void canCreateStartElementWithElementName() {
+    private XMLStartElement createStartElementWithOnlyName() {
         XMLElementBuilder builder = XMLElementBuilder.builder(new XMLElementSourceDouble());
         builder.elementName(new QName("hello"));
-        XMLElement xmlElement = builder.asStartElement();
-        assertThat(xmlElement.isStartElement()).isTrue();
-        assertThat(xmlElement.isEndElement()).isFalse();
-        assertThat(xmlElement.getElementName()).isEqualTo(new QName("hello"));
+        return builder.asStartElement();
     }
 
-    @Test
-    public void canCreateStartElementWithElementNameAndText() {
+    private XMLStartElement creatStartElementWithEmptyText() {
+        XMLElementBuilder builder = XMLElementBuilder.builder(new XMLElementSourceDouble());
+        builder.elementName(new QName("hello"));
+        builder.text("");
+        return builder.asStartElement();
+    }
+
+    private XMLStartElement createStartElementWithNameTextAndAttribute() {
         XMLElementBuilder builder = XMLElementBuilder.builder(new XMLElementSourceDouble());
         builder.elementName(new QName("hello"));
         builder.text("npetzall");
-        XMLElement xmlElement = builder.asStartElement();
+        builder.addAttribute(new  QName("id"), "123");
+        builder.addAttribute(new  QName("name"), "nisse");
+        return builder.asStartElement();
+    }
+
+    @Test
+    public void startElementIsStartElementAndNotEndElement() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
         assertThat(xmlElement.isStartElement()).isTrue();
         assertThat(xmlElement.isEndElement()).isFalse();
+    }
+
+    @Test
+    public void startElementGetName() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
         assertThat(xmlElement.getElementName()).isEqualTo(new QName("hello"));
+    }
+
+    @Test
+    public void starElementGetText() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
         assertThat(xmlElement.hasText()).isTrue();
         assertThat(xmlElement.getText()).isEqualTo("npetzall");
+    }
+
+    @Test
+    public void startElementWithEmptyTextShouldReturnFalseOnHasTextAndNullOnGetText() {
+        XMLElement xmlElement = creatStartElementWithEmptyText();
+        assertThat(xmlElement.hasText()).isFalse();
+        assertThat(xmlElement.getText()).isNull();
+    }
+
+
+    @Test
+    public void startElementMissingTextIsNull() {
+        XMLElement xmlElement = createStartElementWithOnlyName();
+        assertThat(xmlElement.hasText()).isFalse();
+        assertThat(xmlElement.getText()).isNull();
+    }
+
+    @Test
+    public void startElementGetAttributes() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
+        assertThat(xmlElement.hasAttributeWithName(new QName("id"))).isTrue();
+        assertThat(xmlElement.getValueOfAttributeWithName(new QName("id"))).isEqualTo("123");
+        assertThat(xmlElement.hasAttributeWithName(new QName("name"))).isTrue();
+        assertThat(xmlElement.getValueOfAttributeWithName(new QName("name"))).isEqualTo("nisse");
+    }
+
+    @Test
+    public void startElementGetMissingAttributesIsHasAttributeFalseAndGetAttributeValueNull() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
+        assertThat(xmlElement.hasAttributeWithName(new QName("missing"))).isFalse();
+        assertThat(xmlElement.getValueOfAttributeWithName(new QName("missing"))).isNull();
+    }
+
+    @Test
+    public void startElementGetAttributesUsingWildcardNamespace() {
+        XMLElement xmlElement = createStartElementWithNameTextAndAttribute();
+        assertThat(xmlElement.hasAttributeWithName(new QName("id"))).isTrue();
+        assertThat(xmlElement.getValueOfAttributeWithName(new QName("id"))).isEqualTo("123");
+        assertThat(xmlElement.hasAttributeWithName(new QName("*","name"))).isTrue();
+        assertThat(xmlElement.getValueOfAttributeWithName(new QName("*","name"))).isEqualTo("nisse");
     }
 
     @Test
