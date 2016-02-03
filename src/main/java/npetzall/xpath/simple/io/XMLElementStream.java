@@ -31,12 +31,12 @@ public class XMLElementStream implements XMLElementSource , AutoCloseable {
         try {
             xmlStreamReader = XMLInputFactory.newFactory().createXMLStreamReader(inputStream);
         } catch (XMLStreamException e) {
-            throw new XMLElementStreamException("Failed to create XMLStreamReader", e);
+            throw new XMLElementStreamReaderException("Failed to create XMLStreamReader", e);
         }
         try {
             xmlStreamReader.nextTag();
         } catch (XMLStreamException e) {
-            throw new XMLElementStreamException("Unable to find start", e);
+            throw new XMLElementStreamReaderException("Unable to find start", e);
         }
         if (hasListeners()) {
             process();
@@ -46,13 +46,13 @@ public class XMLElementStream implements XMLElementSource , AutoCloseable {
 
     private void checkSourceStream() {
         if (sourceStream == null) {
-            throw new XMLElementStreamException("InputStream is null");
+            throw new XMLElementStreamInputStreamIsNullException("InputStream is null");
         }
     }
 
     private void checkXMLElementListeners() {
         if (xmlElementListeners == null) {
-            throw new XMLElementStreamException("XMLElementListenerList is null");
+            throw new XMLElementStreamXMLElementListnersIsNullException("XMLElementListenerList is null");
         }
     }
 
