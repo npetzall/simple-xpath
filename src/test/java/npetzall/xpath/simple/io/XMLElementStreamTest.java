@@ -12,25 +12,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.StrictAssertions.assertThat;
+import static org.assertj.core.api.StrictAssertions.fail;
 
 public class XMLElementStreamTest {
-
-    @Test
-    public void createXMLElementStreamFromInputStreamAndElementListenerList() {
-        InputStream inputStream = new ByteArrayInputStream(XMLResources.getSimpleXMLWithoutNamespaces().getBytes(StandardCharsets.UTF_8));
-        List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
-        xmlElementListenerList.add(new XMLElementListener() {
-            public void onStartElement(XMLElement xmlElement) {
-
-            }
-
-            public void onEndElement(XMLElement xmlElement) {
-
-            }
-        });
-        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
-        assertThat(xmlElementStream).isNotNull();
-    }
 
     @Test
     public void xmlElementsAreCreatedAndSentToListener() {
@@ -47,8 +31,65 @@ public class XMLElementStreamTest {
                 endElementCounter.incrementAndGet();
             }
         });
-        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
+        new XMLElementStream(inputStream, xmlElementListenerList);
         assertThat(startElementCounter.intValue()).isEqualTo(endElementCounter.intValue());
         assertThat(startElementCounter.intValue()).isEqualTo(XMLResources.getSimpleXMLWithoutNamespacesStartElementCount());
+    }
+
+    @Test
+    public void xmlElementTextsShouldBeNullOrHello() {
+        InputStream inputStream = new ByteArrayInputStream(XMLResources.getSimpleXMLWithTextWithspaceAndAttribute().getBytes(StandardCharsets.UTF_8));
+        List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
+        xmlElementListenerList.add(new XMLElementListener() {
+            public void onStartElement(XMLElement xmlElement) {
+                if (xmlElement.getText() != null && !"hello".equalsIgnoreCase(xmlElement.getText())) {
+                    fail("XMLElement text was \""+ xmlElement.getText() +"\"");
+                }
+            }
+
+            public void onEndElement(XMLElement xmlElement) { }
+        });
+        new XMLElementStream(inputStream, xmlElementListenerList);
+    }
+
+    @Test(expectedExceptions = XMLElementStreamException.class)
+    public void inputStreamIsNull() {
+        List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
+        xmlElementListenerList.add(new XMLElementListener() {
+            public void onStartElement(XMLElement xmlElement) { }
+
+            public void onEndElement(XMLElement xmlElement) { }
+        });
+        new XMLElementStream(null, xmlElementListenerList);
+    }
+
+    @Test(expectedExceptions = XMLElementStreamException.class)
+    public void xmlElementListnerListIsNull () {
+        InputStream inputStream = new ByteArrayInputStream(XMLResources.getSimpleXMLWithoutNamespaces().getBytes(StandardCharsets.UTF_8));
+        new XMLElementStream(inputStream, null);
+    }
+
+    @Test(expectedExceptions = XMLElementStreamException.class)
+    public void xmlOnlyContainsXMLDeclaration() {
+        InputStream inputStream = new ByteArrayInputStream(XMLResources.getXMLWithOnlyXMLDeclartion().getBytes(StandardCharsets.UTF_8));
+        List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
+        xmlElementListenerList.add(new XMLElementListener() {
+            public void onStartElement(XMLElement xmlElement) { }
+
+            public void onEndElement(XMLElement xmlElement) { }
+        });
+        new XMLElementStream(inputStream, xmlElementListenerList);
+    }
+
+    @Test(expectedExceptions = XMLElementStreamException.class)
+    public void xmlIsInvalid() {
+        InputStream inputStream = new ByteArrayInputStream(XMLResources.getInvalidXML().getBytes(StandardCharsets.UTF_8));
+        List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
+        xmlElementListenerList.add(new XMLElementListener() {
+            public void onStartElement(XMLElement xmlElement) { }
+
+            public void onEndElement(XMLElement xmlElement) { }
+        });
+        new XMLElementStream(inputStream, xmlElementListenerList);
     }
 }

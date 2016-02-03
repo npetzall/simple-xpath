@@ -24,22 +24,36 @@ public class XMLElementStream implements XMLElementSource , AutoCloseable {
     private final XMLElementBuilder xmlElementBuilder = XMLElementBuilder.builder(this);
 
     public XMLElementStream(InputStream inputStream, List<XMLElementListener> xmlElementListeners) {
-        if(inputStream == null || xmlElementListeners.isEmpty()) {
-            throw new XMLElementStreamException("InputStream is null: " + (inputStream != null) + " XMLElementList is empty: " + (xmlElementListeners.isEmpty()));
-        }
         sourceStream = inputStream;
+        this.xmlElementListeners = xmlElementListeners;
+        checkSourceStream();
+        checkXMLElementListeners();
         try {
             xmlStreamReader = XMLInputFactory.newFactory().createXMLStreamReader(inputStream);
         } catch (XMLStreamException e) {
             throw new XMLElementStreamException("Failed to create XMLStreamReader", e);
         }
-        this.xmlElementListeners = xmlElementListeners;
         try {
             xmlStreamReader.nextTag();
         } catch (XMLStreamException e) {
             throw new XMLElementStreamException("Unable to find start", e);
         }
-        process();
+        if (hasListeners()) {
+            process();
+        }
+        close();
+    }
+
+    private void checkSourceStream() {
+        if (sourceStream == null) {
+            throw new XMLElementStreamException("InputStream is null");
+        }
+    }
+
+    private void checkXMLElementListeners() {
+        if (xmlElementListeners == null) {
+            throw new XMLElementStreamException("XMLElementListenerList is null");
+        }
     }
 
     private void process() {
