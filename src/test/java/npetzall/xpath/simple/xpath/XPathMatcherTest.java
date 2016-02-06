@@ -327,4 +327,31 @@ public class XPathMatcherTest {
         assertThat(matchFound.get()).isTrue();
     }
 
+    @Test
+    public void elementsExistsBeneathXPath() {
+        XPath xPath = XPath.parse("/one/two/three");
+        final AtomicBoolean matchFound = new AtomicBoolean(false);
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+            matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
+            return true;
+        });
+        xPathMatcher.onStartElement(
+                XMLElementBuilder.builder(new XMLElementSourceDouble())
+                        .elementName(new QName("one"))
+                        .asStartElement());
+        xPathMatcher.onStartElement(
+                XMLElementBuilder.builder(new XMLElementSourceDouble())
+                        .elementName(new QName("two"))
+                        .asStartElement());
+        xPathMatcher.onStartElement(
+                XMLElementBuilder.builder(new XMLElementSourceDouble())
+                        .elementName(new QName("three"))
+                        .asStartElement());
+        xPathMatcher.onStartElement(
+                XMLElementBuilder.builder(new XMLElementSourceDouble())
+                        .elementName(new QName("four"))
+                        .asStartElement());
+        assertThat(matchFound.get()).isTrue();
+    }
+
 }

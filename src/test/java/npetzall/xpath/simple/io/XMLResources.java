@@ -19,4 +19,9 @@ public class XMLResources {
 
     public static String getInvalidXML() { return "<?xml?<?<xml/>"; }
     public static int getInvalidXMLStartElementCount() { return 0; }
+
+    public static String getAdvanceXMLWithoutNamespace() {
+        return null;
+    }
+    public static int getAdvancedXMLWithoutNamespaceStartElementCount() { return 1; }
 }

@@ -21,15 +21,15 @@ public class XPathMatcher implements XMLElementListener {
     public void onStartElement(XMLElement xmlElement) {
         if (isMatching(xmlElement)) {
             matchedToDepth = depth;
-            if (xPath.maxDepth() == matchedToDepth) {
-                xPathMatcherCallBack.matchFound(xmlElement);
+            if (xPath.maxDepth() == matchedToDepth && xPathMatcherCallBack.matchFound(xmlElement)) {
+                xmlElement.getSource().removeXMLElementListener(this);
             }
         }
         depth++;
     }
 
     private boolean isMatching(XMLElement xmlElement) {
-        return (depth == 0 || depth == matchedToDepth + 1) && xPath.matches(depth, xmlElement);
+        return (depth == 0 || depth == matchedToDepth + 1) && depth <= xPath.maxDepth() && xPath.matches(depth, xmlElement);
     }
 
     @Override
