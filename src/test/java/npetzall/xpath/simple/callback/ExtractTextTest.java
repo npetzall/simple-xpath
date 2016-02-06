@@ -18,7 +18,7 @@ public class ExtractTextTest {
     public void extractTextToMap() {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractText("name", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextLast("name"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                 .elementName(new QName("user"))
@@ -38,7 +38,7 @@ public class ExtractTextTest {
     public void willExtractTextLastToMap() {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractText("name", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextLast("name"), results);
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
@@ -72,7 +72,7 @@ public class ExtractTextTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextOnlyOnce("name", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextFirst("name"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))
@@ -94,7 +94,7 @@ public class ExtractTextTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractText("name", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextLast("name"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))
@@ -114,7 +114,7 @@ public class ExtractTextTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextOnlyOnce("name", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractTextFirst("name"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))

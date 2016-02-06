@@ -5,20 +5,18 @@ import npetzall.xpath.simple.api.XPathMatcherCallBack;
 
 import java.util.Map;
 
-public class ExtractText implements XPathMatcherCallBack {
+public class ExtractTextLast implements XPathMatcherCallBack {
 
     private final String key;
-    private final Map<String,String> map;
 
-    ExtractText(String key, Map<String,String> map) {
+    ExtractTextLast(String key) {
         this.key = key;
-        this.map = map;
     }
 
     @Override
-    public boolean matchFound(XMLElement xmlElement) {
+    public boolean matchFound(XMLElement xmlElement, Map<String,String> parameters) {
         if (xmlElement.hasText()) {
-            map.put(key, xmlElement.getText());
+            parameters.put(key, xmlElement.getText());
         }
         return false;
     }

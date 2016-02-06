@@ -5,6 +5,7 @@ import npetzall.xpath.simple.element.XMLElementSourceDouble;
 import org.testng.annotations.Test;
 
 import javax.xml.namespace.QName;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +15,7 @@ public class XPathMatcherTest {
     @Test
     public void createXPathMatcher() {
         XPath xPath = XPath.parse("/root/one/two");
-        XPathMatcher xpathMatcher = new XPathMatcher(xPath, null);
+        XPathMatcher xpathMatcher = new XPathMatcher(xPath, null, new HashMap<>());
         assertThat(xpathMatcher).isNotNull();
     }
 
@@ -22,10 +23,10 @@ public class XPathMatcherTest {
     public void xPathMatcherMatchesSingleXPathElement() {
         XPath xPath = XPath.parse("/root");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("root".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("root"))
@@ -37,10 +38,10 @@ public class XPathMatcherTest {
     public void xPathMatcherDoesntMatchesSingleXPathElement() {
         XPath xPath = XPath.parse("/other");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("root".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("root"))
@@ -52,10 +53,10 @@ public class XPathMatcherTest {
     public void matchesThreeElements() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -75,10 +76,10 @@ public class XPathMatcherTest {
     public void doesntMatcheOnFirstElements() {
         XPath xPath = XPath.parse("/two/one/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -98,10 +99,10 @@ public class XPathMatcherTest {
     public void doesntMatcheOnSecondElements() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -121,10 +122,10 @@ public class XPathMatcherTest {
     public void doesntMatcheOnThreeElements() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -144,10 +145,10 @@ public class XPathMatcherTest {
     public void matchesThreeElementsAfterExistingOneElement() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -175,10 +176,10 @@ public class XPathMatcherTest {
     public void doesntMatchesThreeElementsAfterExistingOneElement() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -206,10 +207,10 @@ public class XPathMatcherTest {
     public void doesntMatchesThreeElementsAfterSwitchingRootElement() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -245,10 +246,10 @@ public class XPathMatcherTest {
     public void matchesThreeElementsAfterSwitchingRootElement() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -284,10 +285,10 @@ public class XPathMatcherTest {
     public void matchesThreeElementsOnSiblingElement() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))
@@ -331,10 +332,10 @@ public class XPathMatcherTest {
     public void elementsExistsBeneathXPath() {
         XPath xPath = XPath.parse("/one/two/three");
         final AtomicBoolean matchFound = new AtomicBoolean(false);
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, xmlElement -> {
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, (xmlElement, parameters) -> {
             matchFound.set("three".equals(xmlElement.getElementName().getLocalPart()));
             return true;
-        });
+        }, new HashMap<>());
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("one"))

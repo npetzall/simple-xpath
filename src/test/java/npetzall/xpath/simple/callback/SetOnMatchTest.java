@@ -19,7 +19,7 @@ public class SetOnMatchTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.setOnMatch("set", "hello",results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.setOnMatch("set", "hello"),results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))
@@ -40,7 +40,7 @@ public class SetOnMatchTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.setOnMatch("set", "hello",results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.setOnMatch("set", "hello"),results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))

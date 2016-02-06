@@ -18,7 +18,7 @@ public class ExtractAttributeTest {
     public void extractAttributeToMap() {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttribute(new QName("id"), "id", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeLast(new QName("id"), "id"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(new XMLElementSourceDouble())
                         .elementName(new QName("user"))
@@ -39,7 +39,7 @@ public class ExtractAttributeTest {
     public void willExtractAttributeLastToMap() {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttribute(new QName("id"), "id", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeLast(new QName("id"), "id"), results);
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
@@ -75,7 +75,7 @@ public class ExtractAttributeTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeOnlyOnce(new QName("id"), "id", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeFirst(new QName("id"), "id"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))
@@ -99,7 +99,7 @@ public class ExtractAttributeTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttribute(new QName("id"), "id", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeLast(new QName("id"), "id"),results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))
@@ -121,7 +121,7 @@ public class ExtractAttributeTest {
         XPath xPath = XPath.parse("/user/name");
         Map<String, String> results = new HashMap<>();
         XMLElementSourceDouble xmlElementSourceDouble = new XMLElementSourceDouble();
-        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeOnlyOnce(new QName("id"), "id", results));
+        XPathMatcher xPathMatcher = new XPathMatcher(xPath, Callbacks.extractAttributeFirst(new QName("id"), "id"), results);
         xPathMatcher.onStartElement(
                 XMLElementBuilder.builder(xmlElementSourceDouble)
                         .elementName(new QName("user"))

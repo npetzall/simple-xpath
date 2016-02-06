@@ -19,8 +19,8 @@ public class SimpleUseCaseTest {
         XPathProcessorFactory xPathProcessorFactory = XPathProcessorFactory
                 .builder()
                 .addPrefixAndNamespace("","")
-                .addAttributeExtractor("",new QName("id"), "id")
-                .addTextExtractor("", "text")
+                .addExtractAttributeLast("",new QName("id"), "id")
+                .addExtractTextLast("", "text")
                 .addSetOnMatch("","selector","something")
                 .build();
 

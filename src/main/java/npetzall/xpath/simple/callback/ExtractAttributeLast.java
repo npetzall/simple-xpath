@@ -6,23 +6,20 @@ import npetzall.xpath.simple.api.XPathMatcherCallBack;
 import javax.xml.namespace.QName;
 import java.util.Map;
 
-public class ExtractAttributeOnlyOnce implements XPathMatcherCallBack {
+public class ExtractAttributeLast implements XPathMatcherCallBack {
 
     private final QName attributeName;
     private final String key;
-    private final Map<String,String> map;
 
-    ExtractAttributeOnlyOnce(QName attributeName, String key, Map<String,String> map) {
+    ExtractAttributeLast(QName attributeName, String key) {
         this.attributeName = attributeName;
         this.key = key;
-        this.map = map;
     }
 
     @Override
-    public boolean matchFound(XMLElement xmlElement) {
+    public boolean matchFound(XMLElement xmlElement, Map<String,String> parameters) {
         if (xmlElement.hasAttributeWithName(attributeName)) {
-            map.put(key,xmlElement.getValueOfAttributeWithName(attributeName));
-            return true;
+            parameters.put(key,xmlElement.getValueOfAttributeWithName(attributeName));
         }
         return false;
     }

@@ -3,30 +3,29 @@ package npetzall.xpath.simple.callback;
 import npetzall.xpath.simple.api.XPathMatcherCallBack;
 
 import javax.xml.namespace.QName;
-import java.util.Map;
 
 public class Callbacks {
 
     private Callbacks() {}
 
-    public static XPathMatcherCallBack extractText(String key, Map<String,String> map) {
-        return new ExtractText(key,map);
+    public static XPathMatcherCallBack extractTextFirst(String key) {
+        return new ExtractTextFirst(key);
     }
 
-    public static XPathMatcherCallBack extractTextOnlyOnce(String key, Map<String,String> map) {
-        return new ExtractTextOnlyOnce(key,map);
+    public static XPathMatcherCallBack extractTextLast(String key) {
+        return new ExtractTextLast(key);
     }
 
-    public static XPathMatcherCallBack extractAttribute(QName attributeName, String key, Map<String,String> map) {
-        return new ExtractAttribute(attributeName, key, map);
+    public static XPathMatcherCallBack extractAttributeFirst(QName attributeName, String key) {
+        return new ExtractAttributeFirst(attributeName, key);
     }
 
-    public static XPathMatcherCallBack extractAttributeOnlyOnce(QName attributeName, String key, Map<String,String> map) {
-        return new ExtractAttributeOnlyOnce(attributeName, key, map);
+    public static XPathMatcherCallBack extractAttributeLast(QName attributeName, String key) {
+        return new ExtractAttributeLast(attributeName, key);
     }
 
-    public static XPathMatcherCallBack setOnMatch(String key, String value, Map<String,String> map) {
-        return new SetOnMatch(key, value, map);
+    public static XPathMatcherCallBack setOnMatch(String key, String value) {
+        return new SetOnMatch(key, value);
     }
 
 }
