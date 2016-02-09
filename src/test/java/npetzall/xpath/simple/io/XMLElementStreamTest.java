@@ -31,7 +31,8 @@ public class XMLElementStreamTest {
                 endElementCounter.incrementAndGet();
             }
         });
-        new XMLElementStream(inputStream, xmlElementListenerList);
+        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
+        xmlElementStream.process();
         assertThat(startElementCounter.intValue()).isEqualTo(endElementCounter.intValue());
         assertThat(startElementCounter.intValue()).isEqualTo(XMLResources.getSimpleXMLWithoutNamespacesStartElementCount());
     }
@@ -49,14 +50,16 @@ public class XMLElementStreamTest {
 
             public void onEndElement(XMLElement xmlElement) { }
         });
-        new XMLElementStream(inputStream, xmlElementListenerList);
+        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
+        xmlElementStream.process();
     }
 
     @Test
     public void noListeners() {
         InputStream inputStream = new ByteArrayInputStream(XMLResources.getSimpleXMLWithTextWithspaceAndAttribute().getBytes(StandardCharsets.UTF_8));
         List<XMLElementListener> xmlElementListenerList = new LinkedList<>();
-        new XMLElementStream(inputStream, xmlElementListenerList);
+        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
+        xmlElementStream.process();
     }
 
     @Test
@@ -90,7 +93,8 @@ public class XMLElementStreamTest {
         };
         xmlElementListenerList.add(listenerA);
         xmlElementListenerList.add(listenerB);
-        new XMLElementStream(inputStream, xmlElementListenerList);
+        XMLElementStream xmlElementStream = new XMLElementStream(inputStream, xmlElementListenerList);
+        xmlElementStream.process();
         assertThat(startElementCounterA.intValue()).isEqualTo(endElementCounterA.intValue());
         assertThat(startElementCounterA.intValue()).isEqualTo(XMLResources.getSimpleXMLWithoutNamespacesStartElementCount());
         assertThat(startElementCounterB.intValue()).isEqualTo(1);

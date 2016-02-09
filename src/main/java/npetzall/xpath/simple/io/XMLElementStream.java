@@ -38,10 +38,6 @@ public class XMLElementStream implements XMLElementSource , AutoCloseable {
         } catch (XMLStreamException e) {
             throw new XMLElementStreamReaderException("Unable to find start", e);
         }
-        if (hasListeners()) {
-            process();
-        }
-        close();
     }
 
     private void checkSourceStream() {
@@ -56,17 +52,20 @@ public class XMLElementStream implements XMLElementSource , AutoCloseable {
         }
     }
 
-    private void process() {
-        do {
-            if(xmlStreamReader.isStartElement()) {
-                createStartElement();
-            } else if (xmlStreamReader.isEndElement()) {
-                createEndElement();
-            } else {
-                nextTagOrEOF();
+    public void process() {
+        if (hasListeners()) {
+            do {
+                if (xmlStreamReader.isStartElement()) {
+                    createStartElement();
+                } else if (xmlStreamReader.isEndElement()) {
+                    createEndElement();
+                } else {
+                    nextTagOrEOF();
+                }
             }
+            while (continueToProcess());
         }
-        while(continueToProcess());
+        close();
     }
 
     private boolean continueToProcess() {
