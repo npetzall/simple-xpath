@@ -21,7 +21,7 @@ public class XPathParser {
             if (parts[i].contains(":")) {
                 xPathParts.add(createXPathPartWithNamespace(parts[i], prefixNamespaceMap));
             } else {
-                xPathParts.add(new XPathPart(new QName(parts[i])));
+                xPathParts.add(new XPathPartElementOnly(new QName(parts[i])));
             }
         }
         return xPathParts;
@@ -30,9 +30,9 @@ public class XPathParser {
     private XPathPart createXPathPartWithNamespace(String part, Map<String, String> prefixNamespaceMap) {
         String[] tokens = part.split(":");
         if ("*".equals(tokens[0])) {
-            return new XPathPart(new QName("*", tokens[1]));
+            return new XPathPartElementOnly(new QName("*", tokens[1]));
         } else {
-            return new XPathPart(new QName(prefixNamespaceMap.get(tokens[0]), tokens[1]));
+            return new XPathPartElementOnly(new QName(prefixNamespaceMap.get(tokens[0]), tokens[1]));
         }
     }
 }

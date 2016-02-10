@@ -9,17 +9,17 @@ import javax.xml.namespace.QName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class XPathPartTest {
+public class XPathPartElementOnlyTest {
 
     @Test
     public void canCreate() {
-        XPathPart xPathPart = new XPathPart(new QName("*","root"));
+        XPathPart xPathPart = new XPathPartElementOnly(new QName("*","root"));
         assertThat(xPathPart).isNotNull();
     }
 
     @Test
     public void canBeMatchedAgainsAnXMLElement() {
-        XPathPart xPathPart = new XPathPart(new QName("root"));
+        XPathPart xPathPart = new XPathPartElementOnly(new QName("root"));
         XMLElement xmlElement = XMLElementBuilder
                 .builder(new XMLElementSourceDouble())
                 .elementName(new QName("","root"))
@@ -29,7 +29,7 @@ public class XPathPartTest {
 
     @Test
     public void wontMatchWhenXMLElementIsntCorrect() {
-        XPathPart xPathPart = new XPathPart(new QName("*","root"));
+        XPathPart xPathPart = new XPathPartElementOnly(new QName("*","root"));
         XMLElement xmlElement = XMLElementBuilder
                 .builder(new XMLElementSourceDouble())
                 .elementName(new QName("","hello"))
@@ -39,7 +39,7 @@ public class XPathPartTest {
 
     @Test
     public void canBeMatchedAgainsAnXMLElementWithNamespaceUsingWildcard() {
-        XPathPart xPathPart = new XPathPart(new QName("*","root"));
+        XPathPart xPathPart = new XPathPartElementOnly(new QName("*","root"));
         XMLElement xmlElement = XMLElementBuilder
                 .builder(new XMLElementSourceDouble())
                 .elementName(new QName("ns","root"))
