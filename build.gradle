@@ -1,11 +1,14 @@
 plugins {
     id "org.sonarqube" version "1.2"
     id 'me.champeau.gradle.jmh' version '0.2.0'
+    id "com.jfrog.bintray" version "1.6"
 }
 
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group 'npetzall.xpath'
 version '0.0.1'
@@ -46,6 +49,30 @@ test.finalizedBy jacocoTestReport
 
 jmh {
     jmhVersion = '1.11.3'
+}
+
+publishing {
+    publications {
+        bintray(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['bintray']
+    pkg {
+        repo = 'maven'
+        name = 'simple-xpath'
+        desc = 'simple-xpath library using stream,event and callbacks. For use with npetzall projects'
+        licenses = ['MIT']
+        websiteUrl = 'https://github.com/npetzall/simple-xpath'
+        issueTrackerUrl = 'https://github.com/npetzall/simple-xpath/issues'
+        vcsUrl = 'https://github.com/npetzall/simple-xpath.git'
+        githubRepo = 'npetzall/simple-xpath'
+    }
 }
 
 task wrapper(type: Wrapper) {
