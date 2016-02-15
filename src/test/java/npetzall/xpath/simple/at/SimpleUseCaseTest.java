@@ -23,6 +23,7 @@ public class SimpleUseCaseTest {
                 .addExtractTextFirst("/settings/section/category/group/setting/default", "first_text")
                 .addExtractTextLast("/settings/section/category/group/setting/default", "last_text")
                 .addSetOnMatch("/settings/section/category/group/setting","selector","setting")
+                .addElementCounter("/settings/section/category","settingsCounter")
                 .build();
 
         InputStream inputStream = new ByteArrayInputStream(XMLResources.getAdvanceXMLWithoutNamespace().getBytes(StandardCharsets.UTF_8));
@@ -38,6 +39,7 @@ public class SimpleUseCaseTest {
         assertThat(data.get("last_text")).isEqualTo("101");
         assertThat(data.containsKey("selector")).isTrue();
         assertThat(data.get("selector")).isEqualTo("setting");
+        assertThat(Integer.parseInt(data.get("settingsCounter"))).isEqualTo(4);
     }
 
     @Test

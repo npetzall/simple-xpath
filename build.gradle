@@ -11,7 +11,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
 group 'npetzall.xpath'
-version '0.0.1'
+version '0.1.0'
 
 repositories {
     mavenLocal()

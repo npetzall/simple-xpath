@@ -63,6 +63,11 @@ public class XPathProcessorFactory {
             return this;
         }
 
+        public Builder addElementCounter(String xPath, String key) {
+            xPathMatcherBuilderFactories.add(new XPathMatcherBuilderFactory(xPath, Callbacks.countElements(key)));
+            return this;
+        }
+
         public XPathProcessorFactory build() {
             return new XPathProcessorFactory(xPathMatcherBuilderFactories.stream().map(xPathMatcherBuilderFactory -> xPathMatcherBuilderFactory.build(prefixNamespace)).collect(Collectors.toList()));
         }

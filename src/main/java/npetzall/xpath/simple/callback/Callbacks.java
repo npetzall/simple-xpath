@@ -28,4 +28,7 @@ public class Callbacks {
         return new SetOnMatch(key, value);
     }
 
+    public static XPathMatcherCallBack countElements(String key) {
+        return new ElementCounter(key);
+    }
 }
